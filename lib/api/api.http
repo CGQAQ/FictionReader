@@ -1,0 +1,12 @@
+# Recent update
+GET https://cn.ttkan.co/api/nq/amp_last_serial_novel_updates?page=1&limit=50&language=cn
+
+###
+
+# chapters
+GET https://cn.ttkan.co/api/nq/amp_novel_chapters?language=cn&novel_id=xianggongyangchenggonglve-linglingqi
+
+###
+
+# chapter content
+GET https://cn.ttkan.co/novel/user/page_direct?novel_id=jiansong-danshuiluyu&page=760
