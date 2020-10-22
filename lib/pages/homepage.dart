@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import '../api/search.dart' as SearchAPI;
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.jumpToDetail}) : super(key: key);
   final String title;
+  final Function(String) jumpToDetail;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -93,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             splashColor: Colors.blueGrey[100],
                             onTap: () {
                               print("tap ${novel.title}");
+                              widget.jumpToDetail(novel.novelID);
                             },
                             key: ObjectKey(novel),
                             child: Padding(

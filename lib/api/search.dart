@@ -9,14 +9,14 @@ class Novel {
   String title;
   String author;
   String desc;
-  String url;
-  Novel(this.title, this.author, this.desc, this.url);
+  String novelID;
+  Novel(this.title, this.author, this.desc, this.novelID);
   @override
   String toString() {
     return """Title: ${this.title}
 Author: ${this.author}
 Desc: ${this.desc}
-URL: ${this.url}""";
+URL: ${this.novelID}""";
   }
 }
 
@@ -35,7 +35,7 @@ Language getLanguageFromString(String s) {
 
 Future<List<Novel>> search(String keyword,
     {Language language = Language.ChineseTraditional}) async {
-  final url = language == Language.ChineseSimplified ? api_cn : api + keyword;
+  final url = (language == Language.ChineseSimplified ? api_cn : api) + keyword;
   final res = await Http.get(url);
 
   final selector = "#__layout > div > div.frame_body > div.pure-g > div";
@@ -48,12 +48,12 @@ Future<List<Novel>> search(String keyword,
     String title = "";
     String author = "";
     String desc = "";
-    String url = "";
+    String novelID = "";
     final titleAndUrl = ul[0].querySelector("a");
-    url = titleAndUrl.attributes["href"];
+    novelID = titleAndUrl.attributes["href"].split("/").last;
     title = titleAndUrl.querySelector("h3").text;
     author = ul[1].text;
     desc = ul[2].text;
-    return Novel(title, author, desc, url);
+    return Novel(title, author, desc, novelID);
   }).toList();
 }
