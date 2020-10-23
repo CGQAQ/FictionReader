@@ -163,7 +163,7 @@ class FictionDetail extends StatelessWidget {
                   },
                   splashColor: Colors.black,
                   child: Container(
-                    height: 45,
+                    constraints: BoxConstraints(minHeight: 45),
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
