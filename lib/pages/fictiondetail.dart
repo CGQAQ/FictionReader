@@ -1,5 +1,7 @@
+import 'package:fiction_reader/main.dart';
 import 'package:flutter/material.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:provider/provider.dart';
 import '../api/detail.dart' as DetailAPI;
 
 class FictionDetail extends StatelessWidget {
@@ -139,46 +141,49 @@ class FictionDetail extends StatelessWidget {
         ),
         child: Material(
           type: MaterialType.transparency,
-          child: DraggableScrollbar.semicircle(
-            alwaysVisibleScrollThumb: true,
-            labelTextBuilder: (offset) {
-              final int currentItem = _semicircleController.hasClients
-                  ? (_semicircleController.offset /
-                          _semicircleController.position.maxScrollExtent *
-                          data.chapters.length)
-                      .floor()
-                  : 0;
-              return Text("$currentItem");
-            },
-            labelConstraints:
-                BoxConstraints.tightFor(width: 80.0, height: 30.0),
-            controller: _semicircleController,
-            child: ListView.builder(
+          child: Consumer<JumpToReaderType>(
+            builder: (_, jumpToReader, __) => DraggableScrollbar.semicircle(
+              alwaysVisibleScrollThumb: true,
+              labelTextBuilder: (offset) {
+                final int currentItem = _semicircleController.hasClients
+                    ? (_semicircleController.offset /
+                            _semicircleController.position.maxScrollExtent *
+                            data.chapters.length)
+                        .floor()
+                    : 0;
+                return Text("$currentItem");
+              },
+              labelConstraints:
+                  BoxConstraints.tightFor(width: 80.0, height: 30.0),
               controller: _semicircleController,
-              itemCount: data.chapters.length,
-              itemBuilder: (_, index) {
-                return InkWell(
-                  onTap: () {
-                    print(data.chapters[index].title);
-                  },
-                  splashColor: Colors.black,
-                  child: Container(
-                    constraints: BoxConstraints(minHeight: 45),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.blue[100],
-                          width: 2,
+              child: ListView.builder(
+                controller: _semicircleController,
+                itemCount: data.chapters.length,
+                itemBuilder: (_, index) {
+                  return InkWell(
+                    onTap: () {
+                      jumpToReader(_id, data.chapters[index]);
+                      print(data.chapters[index].title);
+                    },
+                    splashColor: Colors.black,
+                    child: Container(
+                      constraints: BoxConstraints(minHeight: 45),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.blue[100],
+                            width: 2,
+                          ),
                         ),
                       ),
+                      child: Text(
+                        data.chapters[index].title,
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                    child: Text(
-                      data.chapters[index].title,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),
