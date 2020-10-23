@@ -1,7 +1,8 @@
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:fiction_reader/main.dart';
 import 'package:flutter/material.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:provider/provider.dart';
+
 import '../api/detail.dart' as DetailAPI;
 
 class FictionDetail extends StatelessWidget {
@@ -82,7 +83,7 @@ class FictionDetail extends StatelessWidget {
                   height: 165,
                 ),
               ),
-              Flexible(
+              Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -106,14 +107,12 @@ class FictionDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      child: Expanded(
-                        child: Text(
-                          data.description.length > 75
-                              ? data.description.substring(0, 75) + "..."
-                              : data.description,
-                          softWrap: true,
-                          overflow: TextOverflow.clip,
-                        ),
+                      child: Text(
+                        data.description.length > 80
+                            ? data.description.substring(0, 80) + "..."
+                            : data.description,
+                        softWrap: true,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
                   ],
@@ -157,6 +156,8 @@ class FictionDetail extends StatelessWidget {
                   BoxConstraints.tightFor(width: 80.0, height: 30.0),
               controller: _semicircleController,
               child: ListView.builder(
+                key: ObjectKey(data.chapters),
+                itemExtent: 45,
                 controller: _semicircleController,
                 itemCount: data.chapters.length,
                 itemBuilder: (_, index) {
