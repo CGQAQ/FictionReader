@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import '../api/detail.dart' as DetailAPI;
 
 class FictionDetail extends StatelessWidget {
   final String _id;
+  final _semicircleController = ScrollController();
 
   FictionDetail(this._id);
 
@@ -26,11 +28,10 @@ class FictionDetail extends StatelessWidget {
                       ],
                     ),
                   ),
-                  body: Column(
-                    children: [
-                      if (snapshot.connectionState == ConnectionState.done)
-                        _generateView(snapshot.data),
-                    ],
+                  body: Container(
+                    child: (snapshot.connectionState == ConnectionState.done)
+                        ? _generateView(snapshot.data)
+                        : null,
                   ));
             }));
   }
@@ -39,13 +40,14 @@ class FictionDetail extends StatelessWidget {
     return Column(
       children: [
         _generateDetailView(data),
+        _generateChapterListView(data),
       ],
     );
   }
 
   Container _generateDetailView(DetailAPI.NovelDetail data) {
     return Container(
-      height: 200,
+      height: 210,
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
@@ -66,11 +68,17 @@ class FictionDetail extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                data.coverUrl,
-                fit: BoxFit.cover,
-                width: 120,
-                height: 160,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 5,
+                ),
+                child: Image.network(
+                  data.coverUrl,
+                  fit: BoxFit.cover,
+                  width: 120,
+                  height: 165,
+                ),
               ),
               Flexible(
                 child: Column(
@@ -95,7 +103,7 @@ class FictionDetail extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: Expanded(
                         child: Text(
                           data.description.length > 75
@@ -112,6 +120,68 @@ class FictionDetail extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _generateChapterListView(DetailAPI.NovelDetail data) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.lightBlue[200],
+              Colors.lightGreen[500],
+            ],
+          ),
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: DraggableScrollbar.semicircle(
+            alwaysVisibleScrollThumb: true,
+            labelTextBuilder: (offset) {
+              final int currentItem = _semicircleController.hasClients
+                  ? (_semicircleController.offset /
+                          _semicircleController.position.maxScrollExtent *
+                          data.chapters.length)
+                      .floor()
+                  : 0;
+              return Text("$currentItem");
+            },
+            labelConstraints:
+                BoxConstraints.tightFor(width: 80.0, height: 30.0),
+            controller: _semicircleController,
+            child: ListView.builder(
+              controller: _semicircleController,
+              itemCount: data.chapters.length,
+              itemBuilder: (_, index) {
+                return InkWell(
+                  onTap: () {
+                    print(data.chapters[index].title);
+                  },
+                  splashColor: Colors.black,
+                  child: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.blue[100],
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      data.chapters[index].title,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
