@@ -97,10 +97,6 @@ class _SearchPageState extends State<SearchPage> {
                               List<Map<String, dynamic>>>(
                           future: database.listBookmarks(),
                           builder: (_, bookmarkListSnapshot) {
-                            if (bookmarkListSnapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Container();
-                            }
                             return ListView.builder(
                               itemCount: novelListSnapshot.data.length,
                               itemBuilder: (BuildContext context, int offset) {
@@ -149,53 +145,59 @@ class _SearchPageState extends State<SearchPage> {
                                           ),
                                         ),
                                       ),
-                                      if (_alreadyInBookmarks(
-                                          bookmarkListSnapshot,
-                                          novelListSnapshot,
-                                          offset))
-                                        IconButton(
-                                          icon: Icon(Icons.bookmark_outlined),
-                                          onPressed: () async {
-                                            try {
-                                              await database
-                                                  .removeBookmark(novel);
-                                              setState(() {});
-                                            } catch (_) {
-                                              Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                      "The book you want remove doesn't exist in bookmarks!"),
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      if (!_alreadyInBookmarks(
-                                          bookmarkListSnapshot,
-                                          novelListSnapshot,
-                                          offset))
-                                        IconButton(
-                                          icon: Icon(Icons.bookmark_outline),
-                                          onPressed: () async {
-                                            try {
-                                              await database.addBookmark(
-                                                  novelListSnapshot
-                                                      .data[offset]);
-                                              setState(() {});
-                                            } catch (e) {
-                                              Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content:
-                                                      Text("Already added!"),
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        )
+                                      Builder(
+                                        builder: (context) {
+                                          if (_alreadyInBookmarks(
+                                              bookmarkListSnapshot,
+                                              novelListSnapshot,
+                                              offset)) {
+                                            return IconButton(
+                                              icon:
+                                                  Icon(Icons.bookmark_outlined),
+                                              onPressed: () async {
+                                                try {
+                                                  await database
+                                                      .removeBookmark(novel);
+                                                  setState(() {});
+                                                } catch (_) {
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          "The book you want remove doesn't exist in bookmarks!"),
+                                                      duration:
+                                                          Duration(seconds: 1),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          } else {
+                                            return IconButton(
+                                              icon:
+                                                  Icon(Icons.bookmark_outline),
+                                              onPressed: () async {
+                                                try {
+                                                  await database.addBookmark(
+                                                      novelListSnapshot
+                                                          .data[offset]);
+                                                  setState(() {});
+                                                } catch (e) {
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          "Already added!"),
+                                                      duration:
+                                                          Duration(seconds: 1),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          }
+                                        },
+                                      )
                                     ],
                                   ),
                                 );
@@ -215,6 +217,9 @@ class _SearchPageState extends State<SearchPage> {
       AsyncSnapshot<List<Map<String, dynamic>>> bookmarkListSnapshot,
       AsyncSnapshot<List<SearchAPI.Novel>> novelListSnapshot,
       int offset) {
+    if (!bookmarkListSnapshot.hasData) {
+      return false;
+    }
     return bookmarkListSnapshot.data
         .any((it) => it["book_id"] == novelListSnapshot.data[offset].novelID);
   }
