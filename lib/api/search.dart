@@ -1,6 +1,5 @@
-import "package:http/http.dart" as Http;
-
 import 'package:html/parser.dart' show parse;
+import "package:http/http.dart" as Http;
 
 const api = "https://www.ttkan.co/novel/search?q=";
 const api_cn = "https://cn.ttkan.co/novel/search?q=";
@@ -16,7 +15,7 @@ class Novel {
     return """Title: ${this.title}
 Author: ${this.author}
 Desc: ${this.desc}
-URL: ${this.novelID}""";
+BookID: ${this.novelID}""";
   }
 }
 

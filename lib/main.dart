@@ -2,8 +2,10 @@ import 'package:fiction_reader/api/detail.dart';
 import 'package:fiction_reader/pages/fictionreader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'pages/homepage.dart';
+
+import 'database.dart' as DB;
 import 'pages/fictiondetail.dart';
+import 'pages/searchpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +21,7 @@ typedef JumpToReaderType = void Function(String, Chapter);
 
 class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final _database = DB.Database.init();
   List<Page> pages = [];
 
   void jumpToDetail(String id) {
@@ -35,6 +38,16 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Widget _databaseProvider({Widget child}) {
+    return FutureBuilder<DB.Database>(
+      future: _database,
+      builder: (_, snapshot) => Provider.value(
+        value: snapshot.data,
+        child: child,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,9 +62,11 @@ class _MyAppState extends State<MyApp> {
           key: _navigatorKey,
           pages: [
             MaterialPage(
-              child: MyHomePage(
-                title: 'Fiction reader',
-                jumpToDetail: jumpToDetail,
+              child: _databaseProvider(
+                child: SearchPage(
+                  title: 'Fiction reader',
+                  jumpToDetail: jumpToDetail,
+                ),
               ),
             ),
             ...pages,
