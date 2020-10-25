@@ -35,175 +35,166 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  DropdownButton<String>(
-                      value: language,
-                      items: ["简体", "繁體"]
-                          .map((it) => DropdownMenuItem<String>(
-                                child: Text(it),
-                                value: it,
-                                key: Key(it),
-                              ))
-                          .toList(),
-                      onChanged: (String s) => setState(() => {language = s})),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                gapPadding: 10.0)),
-                        onChanged: (value) => this.keyword = value,
-                      ),
+    return Center(
+      child: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                DropdownButton<String>(
+                    value: language,
+                    items: ["简体", "繁體"]
+                        .map((it) => DropdownMenuItem<String>(
+                              child: Text(it),
+                              value: it,
+                              key: Key(it),
+                            ))
+                        .toList(),
+                    onChanged: (String s) => setState(() => {language = s})),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              gapPadding: 10.0)),
+                      onChanged: (value) => this.keyword = value,
                     ),
                   ),
-                  StreamBuilder(
-                    initialData: [],
-                    stream: novelListStream.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData)
-                        return IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              search();
-                            });
-                      else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                ],
-              ),
+                ),
+                StreamBuilder(
+                  initialData: [],
+                  stream: novelListStream.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData)
+                      return IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            search();
+                          });
+                    else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ],
             ),
-            Expanded(
-              flex: 9,
-              child: StreamBuilder<List<SearchAPI.Novel>>(
-                stream: novelListStream.stream,
-                builder: (_, novelListSnapshot) {
-                  if (!novelListSnapshot.hasData) return Container();
-                  return Consumer<Database>(
-                    builder: (_, database, __) =>
-                        FutureBuilder<List<Map<String, dynamic>>>(
-                      future: database.listBookmarks(),
-                      builder: (_, bookmarkListSnapshot) {
-                        return ListView.builder(
-                          itemCount: novelListSnapshot.data.length,
-                          itemBuilder: (BuildContext context, int offset) {
-                            final novel = novelListSnapshot.data[offset];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      splashColor: Colors.blueGrey[100],
-                                      onTap: () {
-                                        print("tap ${novel.title}");
-                                        widget.jumpToDetail(novel.novelID);
-                                      },
+          ),
+          Expanded(
+            flex: 9,
+            child: StreamBuilder<List<SearchAPI.Novel>>(
+              stream: novelListStream.stream,
+              builder: (_, novelListSnapshot) {
+                if (!novelListSnapshot.hasData) return Container();
+                return Consumer<Database>(builder: (_, database, __) {
+                  if (database == null) return Container();
+                  return FutureBuilder<List<Map<String, dynamic>>>(
+                    future: database.listBookmarks(),
+                    builder: (_, bookmarkListSnapshot) {
+                      return ListView.builder(
+                        itemCount: novelListSnapshot.data.length,
+                        itemBuilder: (BuildContext context, int offset) {
+                          final novel = novelListSnapshot.data[offset];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    splashColor: Colors.blueGrey[100],
+                                    onTap: () {
+                                      print("tap ${novel.title}");
+                                      widget.jumpToDetail(novel.novelID);
+                                    },
+                                    key: ObjectKey(novel),
+                                    child: Column(
                                       key: ObjectKey(novel),
-                                      child: Column(
-                                        key: ObjectKey(novel),
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            novel.title,
-                                            style: TextStyle(fontSize: 21),
-                                          ),
-                                          Text(
-                                            novel.author,
-                                            style: TextStyle(
-                                                color: Colors.blueGrey[400],
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            novel.desc,
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.blueGrey[300]),
-                                          )
-                                        ],
-                                      ),
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          novel.title,
+                                          style: TextStyle(fontSize: 21),
+                                        ),
+                                        Text(
+                                          novel.author,
+                                          style: TextStyle(
+                                              color: Colors.blueGrey[400],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          novel.desc,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.blueGrey[300]),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  Builder(
-                                    builder: (context) {
-                                      if (_alreadyInBookmarks(
-                                          bookmarkListSnapshot,
-                                          novelListSnapshot,
-                                          offset)) {
-                                        return IconButton(
-                                          icon: Icon(Icons.bookmark_outlined),
-                                          onPressed: () async {
-                                            try {
-                                              await database
-                                                  .removeBookmark(novel);
-                                              setState(() {});
-                                            } catch (_) {
-                                              Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                      "The book you want remove doesn't exist in bookmarks!"),
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        );
-                                      } else {
-                                        return IconButton(
-                                          icon: Icon(Icons.bookmark_outline),
-                                          onPressed: () async {
-                                            try {
-                                              await database.addBookmark(
-                                                  novelListSnapshot
-                                                      .data[offset]);
-                                              setState(() {});
-                                            } catch (e) {
-                                              Scaffold.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content:
-                                                      Text("Already added!"),
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        );
-                                      }
-                                    },
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                                ),
+                                Builder(
+                                  builder: (context) {
+                                    if (_alreadyInBookmarks(
+                                        bookmarkListSnapshot,
+                                        novelListSnapshot,
+                                        offset)) {
+                                      return IconButton(
+                                        icon: Icon(Icons.bookmark_outlined),
+                                        onPressed: () async {
+                                          try {
+                                            await database
+                                                .removeBookmark(novel);
+                                            setState(() {});
+                                          } catch (_) {
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    "The book you want remove doesn't exist in bookmarks!"),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      return IconButton(
+                                        icon: Icon(Icons.bookmark_outline),
+                                        onPressed: () async {
+                                          try {
+                                            await database.addBookmark(
+                                                novelListSnapshot.data[offset]);
+                                            setState(() {});
+                                          } catch (e) {
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text("Already added!"),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                   );
-                },
-              ),
+                });
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

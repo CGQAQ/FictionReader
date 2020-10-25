@@ -1,5 +1,7 @@
 import 'package:fiction_reader/api/detail.dart';
+import 'package:fiction_reader/pages/bookshelf.dart';
 import 'package:fiction_reader/pages/fictionreader.dart';
+import 'package:fiction_reader/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,9 +41,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _databaseProvider({Widget child}) {
-    return FutureBuilder<DB.Database>(
+    return FutureBuilder(
       future: _database,
-      builder: (_, snapshot) => Provider.value(
+      builder: (_, snapshot) => Provider<DB.Database>.value(
         value: snapshot.data,
         child: child,
       ),
@@ -61,14 +63,22 @@ class _MyAppState extends State<MyApp> {
         child: Navigator(
           key: _navigatorKey,
           pages: [
-            MaterialPage(
-              child: _databaseProvider(
-                child: SearchPage(
-                  title: 'Fiction reader',
-                  jumpToDetail: jumpToDetail,
+            MaterialPage(child: _databaseProvider(child: HomePage())),
+            if (false)
+              MaterialPage(
+                child: _databaseProvider(
+                  child: BookShelf(),
                 ),
               ),
-            ),
+            if (false)
+              MaterialPage(
+                child: _databaseProvider(
+                  child: SearchPage(
+                    title: 'Fiction reader',
+                    jumpToDetail: jumpToDetail,
+                  ),
+                ),
+              ),
             ...pages,
           ],
           onPopPage: (route, result) {
