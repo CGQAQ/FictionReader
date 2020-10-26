@@ -35,8 +35,16 @@ class _BookShelfState extends State<BookShelf> {
                 itemCount: list.length,
                 itemBuilder: (_, index) {
                   final data = list[index];
-                  return fictionInfoShower(Novel(data["title"], data["author"],
-                      data["description"], data["book_id"]));
+                  final novel = Novel(data["title"], data["author"],
+                      data["description"], data["book_id"]);
+                  return fictionInfoShower(
+                    novel,
+                    true,
+                    () async {
+                      await database.removeBookmark(novel);
+                      setState(() {});
+                    },
+                  );
                 },
               );
             }

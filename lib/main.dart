@@ -1,5 +1,4 @@
 import 'package:fiction_reader/api/detail.dart';
-import 'package:fiction_reader/pages/bookshelf.dart';
 import 'package:fiction_reader/pages/fictionreader.dart';
 import 'package:fiction_reader/pages/homepage.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'database.dart' as DB;
 import 'pages/fictiondetail.dart';
-import 'pages/searchpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 typedef JumpToReaderType = void Function(String, Chapter);
+typedef JumpToDetailType = void Function(String);
 
 class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -63,22 +62,14 @@ class _MyAppState extends State<MyApp> {
         child: Navigator(
           key: _navigatorKey,
           pages: [
-            MaterialPage(child: _databaseProvider(child: HomePage())),
-            if (false)
-              MaterialPage(
+            MaterialPage(
+              child: Provider.value(
+                value: jumpToDetail,
                 child: _databaseProvider(
-                  child: BookShelf(),
+                  child: HomePage(),
                 ),
               ),
-            if (false)
-              MaterialPage(
-                child: _databaseProvider(
-                  child: SearchPage(
-                    title: 'Fiction reader',
-                    jumpToDetail: jumpToDetail,
-                  ),
-                ),
-              ),
+            ),
             ...pages,
           ],
           onPopPage: (route, result) {

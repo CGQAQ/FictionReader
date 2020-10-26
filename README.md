@@ -2,6 +2,9 @@
 
 Fiction reader
 
+## Screen captures
+![](screencaptures/4Aiaaf5i8H.gif)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

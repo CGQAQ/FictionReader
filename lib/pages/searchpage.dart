@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fiction_reader/database.dart';
+import 'package:fiction_reader/views/fictioninfoshower.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,95 +98,37 @@ class _SearchPageState extends State<SearchPage> {
                         itemCount: novelListSnapshot.data.length,
                         itemBuilder: (BuildContext context, int offset) {
                           final novel = novelListSnapshot.data[offset];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    splashColor: Colors.blueGrey[100],
-                                    onTap: () {
-                                      print("tap ${novel.title}");
-                                      widget.jumpToDetail(novel.novelID);
-                                    },
-                                    key: ObjectKey(novel),
-                                    child: Column(
-                                      key: ObjectKey(novel),
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          novel.title,
-                                          style: TextStyle(fontSize: 21),
-                                        ),
-                                        Text(
-                                          novel.author,
-                                          style: TextStyle(
-                                              color: Colors.blueGrey[400],
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          novel.desc,
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.blueGrey[300]),
-                                        )
-                                      ],
-                                    ),
+                          final bookmarked = _alreadyInBookmarks(
+                              bookmarkListSnapshot, novelListSnapshot, offset);
+                          return fictionInfoShower(novel, bookmarked, () async {
+                            if (bookmarked) {
+                              try {
+                                await database.removeBookmark(novel);
+                                setState(() {});
+                              } catch (_) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "The book you want remove doesn't exist in bookmarks!"),
+                                    duration: Duration(seconds: 1),
                                   ),
-                                ),
-                                Builder(
-                                  builder: (context) {
-                                    if (_alreadyInBookmarks(
-                                        bookmarkListSnapshot,
-                                        novelListSnapshot,
-                                        offset)) {
-                                      return IconButton(
-                                        icon: Icon(Icons.bookmark_outlined),
-                                        onPressed: () async {
-                                          try {
-                                            await database
-                                                .removeBookmark(novel);
-                                            setState(() {});
-                                          } catch (_) {
-                                            Scaffold.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    "The book you want remove doesn't exist in bookmarks!"),
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
-                                    } else {
-                                      return IconButton(
-                                        icon: Icon(Icons.bookmark_outline),
-                                        onPressed: () async {
-                                          try {
-                                            await database.addBookmark(
-                                                novelListSnapshot.data[offset]);
-                                            setState(() {});
-                                          } catch (e) {
-                                            Scaffold.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text("Already added!"),
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                          );
+                                );
+                              }
+                            } else {
+                              try {
+                                await database.addBookmark(
+                                    novelListSnapshot.data[offset]);
+                                setState(() {});
+                              } catch (e) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Already added!"),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
+                            }
+                          });
                         },
                       );
                     },
