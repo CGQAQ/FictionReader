@@ -27,15 +27,23 @@ class _MyAppState extends State<MyApp> {
 
   void jumpToDetail(String id) {
     setState(() {
-      pages.add(MaterialPage(
-          child:
-              Provider.value(value: jumpToReader, child: FictionDetail(id))));
+      pages.add(
+        MaterialPage(
+          child: Provider.value(
+            value: jumpToReader,
+            child: _databaseProvider(
+              child: FictionDetail(id),
+            ),
+          ),
+        ),
+      );
     });
   }
 
   void jumpToReader(String id, Chapter chapter) {
     setState(() {
-      pages.add(MaterialPage(child: FictionReaderPage(id, chapter)));
+      pages.add(MaterialPage(
+          child: _databaseProvider(child: FictionReaderPage(id, chapter))));
     });
   }
 

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:google_fonts/google_fonts.dart';
 
 enum PageIndex {
   Bookshelf,
@@ -14,7 +15,7 @@ Drawer mainDrawer(
         DrawerHeader(
           child: Text(
             "Fiction reader",
-            style: TextStyle(fontSize: 40, fontFamily: "Courgette"),
+            style: GoogleFonts.courgette(fontSize: 40),
           ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
@@ -54,7 +55,6 @@ Widget _myListTile(
             onchange(PageIndex.Search);
           else
             onchange(PageIndex.Bookshelf);
-
           if (state.currentState.hasDrawer && state.currentState.isDrawerOpen) {
             Navigator.of(state.currentContext).pop();
           }
@@ -64,9 +64,7 @@ Widget _myListTile(
           child: Center(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: 30,
-              ),
+              style: GoogleFonts.sanchez(fontSize: 30),
             ),
           ),
         ),

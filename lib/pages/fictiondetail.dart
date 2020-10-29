@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../api/detail.dart' as DetailAPI;
+import '../database.dart';
 
 class FictionDetail extends StatelessWidget {
   final String _id;
@@ -89,15 +90,55 @@ class FictionDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      data.title,
-                      style:
-                          TextStyle(fontSize: 20, color: Colors.blueGrey[700]),
-                    ),
-                    Text(
-                      data.author,
-                      style:
-                          TextStyle(fontSize: 15, color: Colors.blueGrey[500]),
+                    Consumer2<Database, JumpToReaderType>(
+                      builder: (_, database, jumpToDetail, __) => Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.title,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.blueGrey[700]),
+                              ),
+                              Text(
+                                data.author,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.blueGrey[500]),
+                              ),
+                            ],
+                          ),
+                          if (database != null)
+                            FutureBuilder(
+                              future: database.historyExists(_id),
+                              builder: (_, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Container();
+                                }
+                                if (snapshot.data) {
+                                  return FlatButton(
+                                    child: Text(
+                                      "上次阅读",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    onPressed: () {
+                                      database.tellMe(_id).then((value) =>
+                                          jumpToDetail(
+                                              _id,
+                                              data.chapters
+                                                  .where((element) =>
+                                                      element.id == value)
+                                                  .first));
+                                    },
+                                  );
+                                }
+                                return Container();
+                              },
+                            )
+                        ],
+                      ),
                     ),
                     Text(
                       data.status,
