@@ -198,7 +198,7 @@ class _FictionReaderPageState extends State<FictionReaderPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("Font size: "),
+                                      Text("字体大小: "),
                                       Slider(
                                         onChanged: (newVal) {
                                           setState(() {
@@ -215,7 +215,7 @@ class _FictionReaderPageState extends State<FictionReaderPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("Font familly: "),
+                                      Text("字体: "),
                                       DropdownButton(
                                         value: _fontFamily,
                                         items: [
@@ -279,7 +279,7 @@ class _FictionReaderPageState extends State<FictionReaderPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("Background: "),
+                                      Text("背景颜色: "),
                                       OutlineButton(
                                         color: Colors.white,
                                         onPressed: () {
