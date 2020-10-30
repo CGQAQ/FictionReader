@@ -34,11 +34,12 @@ CREATE TABLE IF NOT EXISTS $_bookmarksTable(
   void _createFictionCacheTable() {
     if (_database.isOpen) _database.execute("""
 CREATE TABLE IF NOT EXISTS $_fictionCacheTable(
-    fiction_id TEXT NOT NULL PRIMARY KEY,
+    fiction_id TEXT NOT NULL,
     chapter_id TEXT NOT NULL,
     fiction_title TEXT NOT NULL,
     chapter_title TEXT NOT NULL,
-    content TEXT
+    content TEXT,
+    PRIMARY KEY(fiction_id, chapter_id)
 )
 """);
   }
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS $_historyTable (
   }
 
   remember(String fictionId, String lastRead) async {
-    if (!await historyExists(fictionId)) {
+    if (!(await historyExists(fictionId))) {
       _database.insert(_historyTable, {
         "fiction_id": fictionId,
         "last_read": lastRead,

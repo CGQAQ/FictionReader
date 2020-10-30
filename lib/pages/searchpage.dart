@@ -106,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
                                 await database.removeBookmark(novel);
                                 setState(() {});
                               } catch (_) {
-                                Scaffold.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
                                         "The book you want remove doesn't exist in bookmarks!"),
@@ -120,7 +120,7 @@ class _SearchPageState extends State<SearchPage> {
                                     novelListSnapshot.data[offset]);
                                 setState(() {});
                               } catch (e) {
-                                Scaffold.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text("Already added!"),
                                     duration: Duration(seconds: 1),
