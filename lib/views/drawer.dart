@@ -4,7 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 enum PageIndex {
   Bookshelf,
   Search,
+  Recommendation,
 }
+
+final _navItems = ["书架", "搜索", "推荐"];
 
 Drawer mainDrawer(
     GlobalKey<ScaffoldState> state, ValueChanged<PageIndex> onchange) {
@@ -19,7 +22,7 @@ Drawer mainDrawer(
           ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
-        ...["书架", "搜索"].map((it) => _myListTile(
+        ..._navItems.map((it) => _myListTile(
               state,
               onchange,
               it,
@@ -49,10 +52,12 @@ Widget _myListTile(
       type: MaterialType.transparency,
       child: InkWell(
         onTap: () {
-          if (text == "Bookshelf")
+          if (text == _navItems[0])
             onchange(PageIndex.Bookshelf);
-          else if (text == "Search")
+          else if (text == _navItems[1])
             onchange(PageIndex.Search);
+          else if (text == _navItems[2])
+            onchange(PageIndex.Recommendation);
           else
             onchange(PageIndex.Bookshelf);
           if (state.currentState.hasDrawer && state.currentState.isDrawerOpen) {

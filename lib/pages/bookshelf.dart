@@ -28,7 +28,7 @@ class _BookShelfState extends State<BookShelf> {
             final list = bookmarkSnapshot.data;
             if (!bookmarkSnapshot.hasData || bookmarkSnapshot.data.length == 0)
               return Container(
-                child: Center(child: Text("Empty")),
+                child: Center(child: Text("书架里还没有书")),
               );
             else {
               return ListView.builder(
