@@ -56,13 +56,7 @@ flutter:
         - asset: assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf
     - family: Noto_Serif_SC
       fonts:
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-Black.otf
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-Bold.otf
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-ExtraLight.otf
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-Light.otf
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-Medium.otf
         - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.otf
-        - asset: assets/fonts/Noto_Serif_SC/NotoSerifSC-SemiBold.otf
     - family: ZCOOL_KuaiLe
       fonts:
         - asset: assets/fonts/ZCOOL_KuaiLe/ZCOOLKuaiLe-Regular.ttf

@@ -14,12 +14,12 @@ Drawer mainDrawer(
       children: [
         DrawerHeader(
           child: Text(
-            "Fiction reader",
+            "小说阅读",
             style: GoogleFonts.courgette(fontSize: 40),
           ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
-        ...["Bookshelf", "Search"].map((it) => _myListTile(
+        ...["书架", "搜索"].map((it) => _myListTile(
               state,
               onchange,
               it,
