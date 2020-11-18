@@ -58,7 +58,7 @@ class Recommendation {
 
     final categoryRecommends =
         dom.querySelectorAll(".frame_body > .pure-g > div").map((e) {
-      final category = e.querySelector("h2").text;
+      final category = e.querySelector("h2").text.trim();
       final headerDom = e.querySelector("li").querySelector("a");
       final headerDetail =
           e.querySelectorAll("li div p").map((e) => e.text).toList();

@@ -368,6 +368,7 @@ class _FictionReaderPageState extends State<FictionReaderPage> {
 
   @override
   void deactivate() {
+    super.deactivate();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
 }
