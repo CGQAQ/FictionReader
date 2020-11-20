@@ -62,7 +62,7 @@ class Recommendation {
       final headerDom = e.querySelector("li").querySelector("a");
       final headerDetail =
           e.querySelectorAll("li div p").map((e) => e.text).toList();
-      final fictionId = headerDom.attributes["href"];
+      final fictionId = headerDom.attributes["href"].split("/").last;
       final fictionTitle = headerDom.attributes["aria-label"];
       final fictionImg = headerDom.querySelector("amp-img").attributes["src"];
       final author = headerDetail[0];
@@ -74,7 +74,7 @@ class Recommendation {
           .map((e) => e.querySelector("a"))
           .toList()
           .map((e) => CategoryRecommendItem(
-              e.attributes["aria-label"], e.attributes["href"]))
+              e.attributes["aria-label"], e.attributes["href"].split("/").last))
           .toList();
       return CategoryRecommend(category, header, items);
     }).toList();

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as Http;
 import 'package:html/parser.dart' show parse;
+import 'package:http/http.dart' as Http;
+
 import './search.dart' show Language;
 
 class Chapter {
@@ -44,6 +45,9 @@ class NovelDetail {
             "#__layout > div > div:nth-child(2) > div > div.pure-g.novel_info > div.pure-u-xl-5-6.pure-u-lg-5-6.pure-u-md-2-3.pure-u-1-2 > ul > li")[3]
         .innerHtml
         .split("</span>")[1];
+    if (novelDetail.status.contains(">")) {
+      novelDetail.status = novelDetail.status.split(">").last;
+    }
     novelDetail.description = dom
         .querySelector(
             "#__layout > div > div:nth-child(2) > div > div.description > p")
