@@ -42,9 +42,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   fonts:
-    - family: Courgette
-      fonts:
-        - asset: assets/fonts/Courgette/Courgette-Regular.ttf
     - family: Liu_Jian_Mao_Cao
       fonts:
         - asset: assets/fonts/Liu_Jian_Mao_Cao/LiuJianMaoCao-Regular.ttf

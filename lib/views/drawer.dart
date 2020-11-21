@@ -18,7 +18,7 @@ Drawer mainDrawer(
         DrawerHeader(
           child: Text(
             "小说阅读",
-            style: GoogleFonts.courgette(fontSize: 40),
+            style: TextStyle(fontSize: 40),
           ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
