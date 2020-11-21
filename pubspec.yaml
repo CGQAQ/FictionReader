@@ -1,7 +1,7 @@
 name: fiction_reader
 description: Fiction reader
 
-version: 1.0.0+1
+version: 1.2.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -42,12 +42,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   fonts:
-    - family: Liu_Jian_Mao_Cao
-      fonts:
-        - asset: assets/fonts/Liu_Jian_Mao_Cao/LiuJianMaoCao-Regular.ttf
-    - family: LongCang
-      fonts:
-        - asset: assets/fonts/Long_Cang/LongCang-Regular.ttf
     - family: Ma_Shan_Zheng
       fonts:
         - asset: assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf
