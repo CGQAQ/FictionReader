@@ -14,7 +14,7 @@ class FictionContent {
       // https://cn.ttkan.co/novel/user/page_direct?novel_id=jiansong-danshuiluyu&page=760
       final url =
           "https://cn.ttkan.co/novel/user/page_direct?novel_id=$novelID&page=$chapterID";
-      final content = await Http.get(url);
+      final content = await Http.get(Uri.parse(url));
       final dom = parse(content.body);
       final fictionTitle = dom
           .querySelectorAll(

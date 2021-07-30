@@ -35,7 +35,7 @@ Language getLanguageFromString(String s) {
 Future<List<Novel>> search(String keyword,
     {Language language = Language.ChineseTraditional}) async {
   final url = (language == Language.ChineseSimplified ? api_cn : api) + keyword;
-  final res = await Http.get(url);
+  final res = await Http.get(Uri.parse(url));
 
   final selector = "#__layout > div > div.frame_body > div.pure-g > div";
 

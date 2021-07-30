@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:fiction_reader/api/recommendation.dart';
 import 'package:fiction_reader/main.dart';
@@ -17,7 +18,6 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Recommendation.create()
         .then((value) => _recommendationController.add(value));
@@ -27,6 +27,85 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
 
   void openDetailPage(String id) {
     _jumpToDetail(id);
+  }
+
+  List<Widget> _listItem(Recommendation recommend) {
+    return recommend.categoryRecommends
+        .asMap()
+        .map(
+          (i, e) => MapEntry(
+            i,
+            ListView.builder(
+              itemCount: recommend.categoryRecommends[i].items.length + 1,
+              itemBuilder: (_, index) {
+                if (index == 0) {
+                  final data = recommend.categoryRecommends[i].header;
+                  return SizedBox(
+                    height: 100,
+                    child: InkWell(
+                      onTap: () {
+                        _jumpToDetail(data.fictionId);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Image.network(data.imageUrl),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.ideographic,
+                                      children: [
+                                        Text(
+                                          data.title,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(data.author),
+                                      ]),
+                                  Text(
+                                    data.description,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return InkWell(
+                    onTap: () {
+                      _jumpToDetail(recommend
+                          .categoryRecommends[i].items[index - 1].fictionId);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        recommend.categoryRecommends[i].items[index - 1].title,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        )
+        .values
+        .toList();
   }
 
   @override
@@ -48,7 +127,11 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
                     final data = recommend.recommends[index];
                     return Stack(
                       children: [
-                        Image.network(data.novelIMG),
+                        Image.network(
+                          data.novelIMG,
+                          height: 130,
+                          width: 98,
+                        ),
                         Positioned.fill(
                           child: Material(
                             color: Colors.transparent,
@@ -92,96 +175,7 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
                       ),
                       Expanded(
                         child: TabBarView(
-                          children: [
-                            ...recommend.categoryRecommends
-                                .asMap()
-                                .map(
-                                  (i, e) => MapEntry(
-                                    i,
-                                    ListView.builder(
-                                      itemCount: recommend.categoryRecommends[i]
-                                              .items.length +
-                                          1,
-                                      itemBuilder: (_, index) {
-                                        if (index == 0) {
-                                          final data = recommend
-                                              .categoryRecommends[i].header;
-                                          return IntrinsicHeight(
-                                            child: InkWell(
-                                              onTap: () {
-                                                _jumpToDetail(data.fictionId);
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Image.network(
-                                                        data.imageUrl),
-                                                    Expanded(
-                                                      child: Column(
-                                                        children: [
-                                                          Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .baseline,
-                                                              textBaseline:
-                                                                  TextBaseline
-                                                                      .ideographic,
-                                                              children: [
-                                                                Text(
-                                                                  data.title,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          20),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 8,
-                                                                ),
-                                                                Text(data
-                                                                    .author),
-                                                              ]),
-                                                          Text(
-                                                            data.description,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          return InkWell(
-                                            onTap: () {
-                                              _jumpToDetail(recommend
-                                                  .categoryRecommends[i]
-                                                  .items[index - 1]
-                                                  .fictionId);
-                                            },
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Text(
-                                                recommend.categoryRecommends[i]
-                                                    .items[index - 1].title,
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                )
-                                .values,
-                          ],
+                          children: [...this._listItem(recommend)],
                         ),
                       )
                     ],

@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS $_historyTable (
         result["chapter_title"],
         result["fiction_id"],
         result["chapter_id"],
-        result["content"].split("\n"));
+        (result["content"] as String).split("\n"));
   }
 
   Future<int> cacheIfNotCached(FictionContent fictionContent) async {

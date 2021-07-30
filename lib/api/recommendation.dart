@@ -43,7 +43,7 @@ class Recommendation {
 
   static Future<Recommendation> create() async {
     final url = "https://cn.ttkan.co/";
-    final res = await Http.get(url);
+    final res = await Http.get(Uri.parse(url));
     final dom = parse(res.body);
     final recommends = dom
         .querySelectorAll(".rank_frame > div:not(.rank_title) > a")
@@ -57,8 +57,9 @@ class Recommendation {
         .toList();
 
     final categoryRecommends =
-        dom.querySelectorAll(".frame_body > .pure-g > div").map((e) {
-      final category = e.querySelector("h2").text.trim();
+        dom.querySelectorAll(".frame_body > .pure-g > div.hot_cell").map((e) {
+      final element = e.querySelector("h2");
+      final category = element.text.trim();
       final headerDom = e.querySelector("li").querySelector("a");
       final headerDetail =
           e.querySelectorAll("li div p").map((e) => e.text).toList();
@@ -87,6 +88,6 @@ class Recommendation {
 }
 
 main() async {
-  await Recommendation.create();
+  final reco = await Recommendation.create();
   print("hello");
 }

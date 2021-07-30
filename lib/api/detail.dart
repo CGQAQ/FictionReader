@@ -23,7 +23,7 @@ class NovelDetail {
   static Future<NovelDetail> from(String novelID,
       {Language language = Language.ChineseSimplified}) async {
     final baseUrl = "https://cn.ttkan.co/novel/chapters/";
-    final res = await Http.get(baseUrl + novelID);
+    final res = await Http.get(Uri.parse(baseUrl + novelID));
     final dom = parse(res.body);
     final novelDetail = NovelDetail();
     novelDetail.coverUrl = dom
@@ -50,11 +50,12 @@ class NovelDetail {
     }
     novelDetail.description = dom
         .querySelector(
-            "#__layout > div > div:nth-child(2) > div > div.description > p")
+            "#__layout > div > div:nth-child(2) > div > div.description")
+        .querySelector("p")
         .text;
 
-    final res2 = await Http.get(
-        "https://cn.ttkan.co/api/nq/amp_novel_chapters?${language == Language.ChineseSimplified ? "language=cn" : ""}&novel_id=$novelID");
+    final res2 = await Http.get(Uri.parse(
+        "https://cn.ttkan.co/api/nq/amp_novel_chapters?${language == Language.ChineseSimplified ? "language=cn" : ""}&novel_id=$novelID"));
 
     final result = JsonDecoder().convert(res2.body)["items"].map((it) {
       return Chapter(it["chapter_name"], it["chapter_id"].toString());
