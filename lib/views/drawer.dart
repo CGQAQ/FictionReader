@@ -8,6 +8,7 @@ enum PageIndex {
 }
 
 final _navItems = ["书架", "搜索", "推荐"];
+var _page = _navItems[0];
 
 Drawer mainDrawer(
     GlobalKey<ScaffoldState> state, ValueChanged<PageIndex> onchange) {
@@ -42,7 +43,7 @@ Widget _myListTile(
   return Container(
     height: 75,
     decoration: BoxDecoration(
-      color: Colors.blue[300],
+      color: _page == text ? Colors.blue[500] : Colors.blue[400],
       border: Border(
         bottom: BorderSide(
           color: Colors.lightBlueAccent,
@@ -65,6 +66,7 @@ Widget _myListTile(
           if (state.currentState.hasDrawer && state.currentState.isDrawerOpen) {
             Navigator.of(state.currentContext).pop();
           }
+          _page = text;
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10),
