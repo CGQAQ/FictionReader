@@ -113,13 +113,13 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
     return Container(
       child: StreamBuilder<Recommendation>(
         stream: _recommendationController.stream,
-        builder: (_, snapshot) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) return Container();
           final recommend = snapshot.data;
           return Column(
             children: [
               LimitedBox(
-                maxHeight: 265,
+                maxHeight: MediaQuery.of(context).size.height / 2,
                 child: GridView.builder(
                   key: ObjectKey(recommend),
                   itemCount: recommend.recommends.length,
