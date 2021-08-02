@@ -123,14 +123,20 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
                 child: GridView.builder(
                   key: ObjectKey(recommend),
                   itemCount: recommend.recommends.length,
+                  padding: EdgeInsets.all(8.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 0.75,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4),
                   itemBuilder: (_, index) {
                     final data = recommend.recommends[index];
                     return Stack(
+                      fit: StackFit.expand,
                       children: [
                         Image.network(
                           data.novelIMG,
-                          height: 130,
-                          width: 98,
+                          fit: BoxFit.fill,
                         ),
                         Positioned.fill(
                           child: Material(
@@ -146,8 +152,6 @@ class _FictionRecommendationState extends State<FictionRecommendation> {
                       ],
                     );
                   },
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4, childAspectRatio: 0.75),
                 ),
               ),
               Expanded(

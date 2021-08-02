@@ -16,9 +16,11 @@ Drawer mainDrawer(
       padding: EdgeInsets.zero,
       children: [
         DrawerHeader(
-          child: Text(
-            "小说阅读",
-            style: TextStyle(fontSize: 40),
+          child: Center(
+            child: Text(
+              "小说阅读",
+              style: TextStyle(fontSize: 40, fontFamily: "Ma_Shan_Zheng"),
+            ),
           ),
           decoration: BoxDecoration(color: Colors.blue),
         ),
@@ -40,7 +42,7 @@ Widget _myListTile(
   return Container(
     height: 75,
     decoration: BoxDecoration(
-      color: Colors.lightBlue,
+      color: Colors.blue[300],
       border: Border(
         bottom: BorderSide(
           color: Colors.lightBlueAccent,
@@ -69,7 +71,7 @@ Widget _myListTile(
           child: Center(
             child: Text(
               text,
-              style: GoogleFonts.sanchez(fontSize: 30),
+              style: GoogleFonts.maShanZheng(fontSize: 30),
             ),
           ),
         ),
